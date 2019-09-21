@@ -40,7 +40,7 @@ displayNumericGraphs <- function(){
   print ( ggplot(uniData, aes(x = Achieved_Credit_Points )) + geom_density() + xlim(0, 220) + labs( x = "Achieved_Credit_Points" ) )
   # Histogram
   print (ggplot(uniData, aes(x = GPA )) + geom_histogram(bins = 7) + labs( x = "GPA" ) )
-  print (ggplot(uniData, aes(x = OP_Score )) + geom_histogram(bins = 5) + labs( x = "OP_Score" ) )
+  print (ggplot(uniData, aes(x = OP_Score )) + geom_histogram(bins = 10) + labs( x = "OP_Score" ) )
   # Without Log
   print (ggplot(uniData, aes(x = Failed_Credit_Points )) + geom_histogram(bins = 5) + labs( x = "Failed_Credit_Point" ) )
 }
@@ -68,3 +68,9 @@ var.test(GPA ~ Gender)
 # Explore the relationship between OP Score and GPA using Graph 
 plot(GPA ~ OP_Score)
 
+# Store the variable which will only display the OP Scores and GPAs
+OP_And_GPA <- studentData %>% select(GPA, OP_Score)
+
+uniData %>%
+  mutate(GPA_Round = as.factor(round(GPA)) ) %>%
+  ggplot( aes(x = OP_Score, fill = GPA_Round) ) + geom_bar(position = "fill") + labs( x = "BoxPlot ( GPA vs Gender )" ) 
