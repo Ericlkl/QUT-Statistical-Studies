@@ -10,10 +10,6 @@ category_cols_names <- select(uniData,2:15) %>%
   select_if(is.factor) %>% 
   colnames()
 
-numeric_cols_names <- select(uniData,2:15) %>%
-  select_if(is.numeric) %>% 
-  colnames()
-
 # Task 1  ----------------------------------------------------------------------
 # Summary the information in each variable (expect case ID) using a table
 select(uniData,2:15) %>%
@@ -26,7 +22,10 @@ displayBarChart <- function(){
   for (colname in category_cols_names ){
     barChart = ggplot(uniData, aes(x = uniData[,colname], fill= uniData[,colname] )) + 
         geom_bar() + 
-        labs( x = colname )
+        labs( x = colname, 
+              y = "Number of Students", 
+              fill = colname,
+              title = paste(colname,"Bar Chart"))
     
     print(barChart)
   }
@@ -36,13 +35,40 @@ displayBarChart <- function(){
 displayNumericGraphs <- function(){
   
   # Density Graph
-  print ( ggplot(uniData, aes(x = Age )) + geom_density() + labs( x = "Age" ) + xlim(18,35) )
-  print ( ggplot(uniData, aes(x = Achieved_Credit_Points )) + geom_density() + xlim(0, 220) + labs( x = "Achieved_Credit_Points" ) )
+  print ( 
+    ggplot(uniData, aes(x = Age )) + 
+    geom_density() + 
+    labs(x = "Age", y = "Frequency", title = "Density Graph of Age") + 
+    xlim(18,35) 
+  )
+  
+  print ( 
+    ggplot(uniData, aes(x = Achieved_Credit_Points )) + 
+    geom_density() + 
+    xlim(0, 220) + 
+    labs(x = "Achieved_Credit_Points" , y = "Frequency", title = "Density Graph of Achieved_Credit_Points" ) 
+  )
+  
   # Histogram
-  print (ggplot(uniData, aes(x = GPA )) + geom_histogram(bins = 7) + labs( x = "GPA" ) )
-  print (ggplot(uniData, aes(x = OP_Score )) + geom_histogram(bins = 10) + labs( x = "OP_Score" ) )
+  print (
+    ggplot(uniData, aes(x = GPA )) + 
+    geom_histogram(bins = 14, color="darkblue", fill="lightblue") + 
+    labs( x = "GPA" , y = "Number of Students", title = "Histogram of GPA") 
+  )
+  
+  print (
+    ggplot(uniData, aes(x = OP_Score )) + 
+    geom_histogram(bins = 10, color="darkblue", fill="lightblue") + 
+    labs( x = "OP_Score" , y = "Number of Students", title = "Histogram of OP Score" ) 
+  )
+  
   # Without Log
-  print (ggplot(uniData, aes(x = Failed_Credit_Points )) + geom_histogram(bins = 5) + labs( x = "Failed_Credit_Point" ) )
+  print (
+    ggplot(uniData, aes(x = Failed_Credit_Points )) + 
+    geom_histogram(bins = 5, color="darkblue", fill="lightblue") + 
+    labs( x = "Failed_Credit_Point" , y = "Number of Students", title = "Histogram of Failed_Credit_Point" ) 
+  )
+  
 }
 
 # Appropriate way to display categorical Data
@@ -66,11 +92,22 @@ var.test(GPA ~ Gender)
 
 # Task 3 ----------------------------------------------------------
 # Explore the relationship between OP Score and GPA using Graph 
-plot(GPA ~ OP_Score)
-
-# Store the variable which will only display the OP Scores and GPAs
-OP_And_GPA <- studentData %>% select(GPA, OP_Score)
 
 uniData %>%
   mutate(GPA_Round = as.factor(round(GPA)) ) %>%
-  ggplot( aes(x = OP_Score, fill = GPA_Round) ) + geom_bar(position = "fill") + labs( x = "BoxPlot ( GPA vs Gender )" ) 
+  ggplot( aes(x = OP_Score, fill = GPA_Round) ) + 
+  geom_bar(position = "fill") + 
+  labs( x = "OP Score ( 1 (highest) -> 25 (lowest) performance )", 
+        y = "proportion of students getting Each OP score", 
+        title = "OP Score Barchart (colored by Each GPA Group) ") 
+
+uniData %>%
+  mutate(GPA_Round = as.factor(round(GPA)) ) %>%
+  ggplot( aes(x = OP_Score) ) + 
+  geom_histogram(bins = 10, color="darkblue", fill="lightblue") + 
+  facet_wrap(~GPA_Round) +
+  labs( x = "OP Score ( 1 (highest) -> 25 (lowest) performance )", 
+        y = "Number of Students", 
+        title = "OP Score histogram (colored by Each GPA Group) ") 
+
+# Task 4 ----------------------------------------------------------
