@@ -14,7 +14,7 @@ numeric_cols_names <- select(uniData,2:15) %>%
   select_if(is.numeric) %>% 
   colnames()
 
-# Task 1
+# Task 1  ----------------------------------------------------------------------
 # Summary the information in each variable (expect case ID) using a table
 select(uniData,2:15) %>%
   summary()
@@ -49,4 +49,22 @@ displayNumericGraphs <- function(){
 displayBarChart()
 # Appropriate way to display numeric Data
 displayNumericGraphs()
+
+# Task 2 ----------------------------------------------------------
+# Compare average GPA between Male and Female 
+# Conduct a statistical Test
+# Interpret its results
+attach(uniData)
+
+uniData %>%
+  ggplot(aes(x=Gender, y = GPA)) + geom_boxplot() + labs( x = "BoxPlot ( GPA vs Gender )" ) 
+
+# T Test
+t.test(GPA ~ Gender)
+# Variance
+var.test(GPA ~ Gender)
+
+# Task 3 ----------------------------------------------------------
+# Explore the relationship between OP Score and GPA using Graph 
+plot(GPA ~ OP_Score)
 
