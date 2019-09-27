@@ -41,5 +41,15 @@ visualize_scatterplots_Vs_GPA(uniData)
 set.seed(2)
 library(caTools)
 
-split <- sample.split()
+predict_df <- uniData %>%
+  select(c("Age", "Failed_Credit_Points", "OP_Score", "Achieved_Credit_Points", "GPA"))
 
+split <- sample.split(predict_df, SplitRatio = 0.7)
+train <- subset(predict_df, split==TRUE)
+test <- subset(predict_df, split==FALSE)
+
+linear_model_age <- lm(GPA ~ Age, data=train)
+summary(linear_model_age)
+
+linear_model_Achieved_Credit_Points <- lm(GPA ~ Achieved_Credit_Points, data=train)
+summary(linear_model_Achieved_Credit_Points)
