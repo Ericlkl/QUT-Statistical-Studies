@@ -101,6 +101,8 @@ visualize_relationship_op_and_gpa <- function(uniData){
 
 visualize_scatterplots_Vs_GPA <-function(uniData){
   
+  par(xpd=FALSE)
+  
   # Age vs GPA Scatter plot
   scatter.smooth(
     x=uniData$Age, y=uniData$GPA, main="Age vs GPA", col="blue",
@@ -123,6 +125,12 @@ visualize_scatterplots_Vs_GPA <-function(uniData){
   # Add Prediction line
   abline(lm(uniData$GPA ~ uniData$OP_Score), col="red", lty=2, lwd=2)
   
+  # Legend Setup
+  legend("bottomright", 
+         legend = c("Linear Regression Line", "Loess Line"), 
+         col = c("red", "black"), lty=2:1, cex=0.8
+  )
+  
   # Achieved_Credit_Points vs GPA Scatter plot
   scatter.smooth(
     x= uniData$Achieved_Credit_Points, y= uniData$GPA, main="Achieved_Credit_Points vs OP_Score", 
@@ -130,6 +138,11 @@ visualize_scatterplots_Vs_GPA <-function(uniData){
   )
   # Add Prediction line
   abline(lm(uniData$GPA ~ uniData$Achieved_Credit_Points), col="red", lty=2, lwd=2)
+  # Legend Setup
+  legend("bottomright", 
+         legend = c("Linear Regression Line", "Loess Line"), 
+         col = c("red", "black"), lty=2:1, cex=0.8
+  )
   
   # Failed_Credit_Points vs GPA Scatter plot
   scatter.smooth(

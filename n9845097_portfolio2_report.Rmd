@@ -25,7 +25,7 @@ Data:
 
 Working Environment Configuration:
 
-```{r eval=TRUE}
+```{r eval=TRUE,message=FALSE}
 
 # Import Library
 library(ggplot2)
@@ -171,7 +171,7 @@ Analyse Each numerical data its relation related to GPA
   3. Achieved_Credit_Points : `r cor(uniData$Achieved_Credit_Points, uniData$GPA)`
   4. Failed_Credit_Points : `r cor(uniData$Failed_Credit_Points, uniData$GPA)`
 
-```{r eval=TRUE}
+```{r eval=TRUE,message=FALSE, warning=FALSE}
 visualize_scatterplots_Vs_GPA(uniData)
 ```
 
@@ -203,12 +203,9 @@ plot(linear_model)
 
 ## Task 5 Logistic Regression
 
-```{r eval=TRUE}
+```{r eval=TRUE, message=FALSE}
 # Logistic Regression Library
 library(DAAG)
-library(cowplot)
-library(InformationValue)
-
 source("regression_helper.R")
 ```
 
@@ -256,7 +253,7 @@ vif(log_model)
 ```
 
 ### Plot Predicted Probabilities 
-```{r eval=TRUE}
+```{r eval=TRUE, message=FALSE}
 predicted.data <- data.frame(
   probability.of.Attrition = log_model$fitted.values,
   Attrition = uniData$Attrition
@@ -277,34 +274,17 @@ ggplot(data=predicted.data, aes(x=rank, y=probability.of.Attrition) ) +
 
 ## ROC Curve
 ```{r eval=TRUE}
-library(InformationValue)
-
+# 
 predicted.data$actuals <- factor(predicted.data$Attrition, labels = c(0,1))
-
-plotROC(actuals = predicted.data$actuals, predictedScores = predicted.data$probability.of.Attrition)
+# Shows ROC Curve
+visualize_ROC_Curve(predicted.data$actuals, predicted.data$probability.of.Attrition)
 ```
 
-### MisClassification Error, sensitivity, specificity
+### MisClassification Error, Sensitivity, Specificity
 ```{r eval=TRUE}
-optCutOff = optimalCutoff(predicted.data$actuals, predicted.data$probability.of.Attrition)[1]
-
-(paste ("Optimal Cut off :", optCutOff))
-
-(paste("MisClassification Error : ",  misClassError(predicted.data$actuals,
-                                                          predicted.data$probability.of.Attrition, 
-                                                          threshold = optCutOff )))
-
-(paste("sensitivity: ",  sensitivity(predicted.data$actuals,
-                                           predicted.data$probability.of.Attrition, 
-                                           threshold = optCutOff )))
-
-(paste("specificity : ", specificity( predicted.data$actuals,
-                                            predicted.data$probability.of.Attrition,
-                                            threshold = optCutOff ) ))
+print_MCE_Sens_Spec( predicted.data$actuals, predicted.data$probability.of.Attrition)
 ```
 
 ```{r eval=TRUE}
-confusionMatrix(predicted.data$actuals,
-                predicted.data$probability.of.Attrition, 
-                threshold = optCutOff )
+print_ConfusionMatrix( predicted.data$actuals, predicted.data$probability.of.Attrition)
 ```
