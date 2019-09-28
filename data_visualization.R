@@ -35,6 +35,7 @@ visualize_numerical_data <- function(uniData){
       xlim(18,35) 
   )
   
+  # Histogram
   print ( 
     ggplot(uniData, aes(x = Achieved_Credit_Points )) + 
       geom_histogram(bins = 10, color="darkblue", fill="lightblue") + 
@@ -42,7 +43,6 @@ visualize_numerical_data <- function(uniData){
       labs(x = "Achieved_Credit_Points" , y = "Frequency", title = "Density Graph of Achieved_Credit_Points" ) 
   )
   
-  # Histogram
   print (
     ggplot(uniData, aes(x = GPA )) + 
       geom_histogram(bins = 14, color="darkblue", fill="lightblue") + 
@@ -101,39 +101,45 @@ visualize_relationship_op_and_gpa <- function(uniData){
 
 visualize_scatterplots_Vs_GPA <-function(uniData){
   
+  # Age vs GPA Scatter plot
   scatter.smooth(
     x=uniData$Age, y=uniData$GPA, main="Age vs GPA", col="blue",
     xlab="Age", ylab="GPA"
   )
-  
+  # Add Prediction line
   abline(lm(uniData$GPA ~ uniData$Age), col="red", lty=2, lwd=2)
   
+  # Legend Setup
   legend("bottomright", 
          legend = c("Linear Regression Line", "Loess Line"), 
          col = c("red", "black"), lty=2:1, cex=0.8
   )
   
+  # OP_Score vs GPA Scatter plot
   scatter.smooth(
     x= uniData$OP_Score, y= uniData$GPA, main="OP_Score vs GPA" , col="blue",
     xlab="Score", ylab="GPA"
   )
-  
+  # Add Prediction line
   abline(lm(uniData$GPA ~ uniData$OP_Score), col="red", lty=2, lwd=2)
   
+  # Achieved_Credit_Points vs GPA Scatter plot
   scatter.smooth(
     x= uniData$Achieved_Credit_Points, y= uniData$GPA, main="Achieved_Credit_Points vs OP_Score", 
     col="blue", xlab="Achieved Credit Points", ylab="GPA"
   )
-  
+  # Add Prediction line
   abline(lm(uniData$GPA ~ uniData$Achieved_Credit_Points), col="red", lty=2, lwd=2)
   
+  # Failed_Credit_Points vs GPA Scatter plot
   scatter.smooth(
     x= uniData$Failed_Credit_Points, y= uniData$GPA, main="Failed_Credit_Points vs OP_Score", 
     col="blue", xlab="Failed Credit Points", ylab="GPA"
   )
-  
+  # Add Prediction line
   abline(lm(uniData$GPA ~ uniData$Failed_Credit_Points), col="red", lty=2, lwd=2)
   
+  # Move Legend to TopRight
   legend("topright", 
          legend = c("Linear Regression Line", "Loess Line"), 
          col = c("red", "black"), lty=2:1, cex=0.8

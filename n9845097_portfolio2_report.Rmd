@@ -191,16 +191,14 @@ test <- subset(uniData, split==FALSE)
 
 ```
 
-### Training Linear Regression Model
+### Training Linear Regression Model & Review diagnostic measures.
 ```{r eval=TRUE}
 linear_model <- lm(GPA ~ Achieved_Credit_Points, data=train)
 summary(linear_model)
 ```
 ### Plot the Linear Regression Prediction Line
 ```{r eval=TRUE}
-
 plot(linear_model)
-
 ```
 
 ## Task 5 Logistic Regression
@@ -210,4 +208,103 @@ plot(linear_model)
 library(DAAG)
 library(cowplot)
 library(InformationValue)
+
+source("regression_helper.R")
+```
+
+### Bivariate exploration
+```{r eval=TRUE}
+xtabs(~ uniData$Attrition + uniData$Socio_Economic_Status)
+```
+
+### A simple model with only one predictor
+```{r eval=TRUE}
+simple_log_model <- glm(Attrition ~ Socio_Economic_Status, data=uniData, family = "binomial")
+summary(simple_log_model)
+```
+
+### simple model P-value & Pseudo R^2 
+```{r eval=TRUE}
+print_R2_and_pvalue(simple_log_model$null.deviance, simple_log_model$deviance)
+```
+
+### Summarise the predicted probailities
+```{r eval=TRUE}
+simple.predicted.data <- data.frame(
+  probability.of.Attrition = simple_log_model$fitted.values,
+  Socio_Economic_Status = uniData$Socio_Economic_Status
+)
+
+xtabs(~ probability.of.Attrition + Socio_Economic_Status ,data=simple.predicted.data)
+```
+
+### Logistic Regression model with all predictors
+```{r}
+# Logistic Regression with all predictors
+log_model <- glm(Attrition ~ ., data=uniData, family = "binomial")
+summary(log_model)
+```
+
+### Logistic Regression model with all predictors P-value & Pseudo R^2 
+```{r eval=TRUE}
+print_R2_and_pvalue(log_model$null.deviance, log_model$deviance)
+```
+
+### Multicollinearity using VIF
+```{r eval=TRUE}
+vif(log_model)
+```
+
+### Plot Predicted Probabilities 
+```{r eval=TRUE}
+predicted.data <- data.frame(
+  probability.of.Attrition = log_model$fitted.values,
+  Attrition = uniData$Attrition
+)
+
+# Sort predicted data by Probabilities
+predicted.data <- predicted.data[order(predicted.data$probability.of.Attrition, decreasing = FALSE),]
+predicted.data$rank <- 1:nrow(predicted.data)
+
+library(ggplot2)
+library(cowplot)
+
+ggplot(data=predicted.data, aes(x=rank, y=probability.of.Attrition) ) +
+  geom_point(aes(color=Attrition), alpha = 1, shape = 4, stroke = 2) +
+  xlab("Index") +
+  ylab("Predicted probability of Attrition")
+```
+
+## ROC Curve
+```{r eval=TRUE}
+library(InformationValue)
+
+predicted.data$actuals <- factor(predicted.data$Attrition, labels = c(0,1))
+
+plotROC(actuals = predicted.data$actuals, predictedScores = predicted.data$probability.of.Attrition)
+```
+
+### MisClassification Error, sensitivity, specificity
+```{r eval=TRUE}
+optCutOff = optimalCutoff(predicted.data$actuals, predicted.data$probability.of.Attrition)[1]
+
+(paste ("Optimal Cut off :", optCutOff))
+
+(paste("MisClassification Error : ",  misClassError(predicted.data$actuals,
+                                                          predicted.data$probability.of.Attrition, 
+                                                          threshold = optCutOff )))
+
+(paste("sensitivity: ",  sensitivity(predicted.data$actuals,
+                                           predicted.data$probability.of.Attrition, 
+                                           threshold = optCutOff )))
+
+(paste("specificity : ", specificity( predicted.data$actuals,
+                                            predicted.data$probability.of.Attrition,
+                                            threshold = optCutOff ) ))
+```
+
+```{r eval=TRUE}
+confusionMatrix(predicted.data$actuals,
+                predicted.data$probability.of.Attrition, 
+                threshold = optCutOff )
 ```
