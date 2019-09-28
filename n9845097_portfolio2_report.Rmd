@@ -1,0 +1,84 @@
+---
+title: "CAB220 Portfolio 2"
+author: "KA LONG LEE (N9845097)"
+date: "28/09/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## CAB220 Portfolio2
+
+Overview
+This portfolio accounts for 20% of your overall grade of CAB220. Full mark of this portfolio is 20. The tasks in this portfolio are designed to assess your knowledge and skills in
+
+• Descriptive statistical data analysis and visualisation 
+• Statistical hypothesis testing
+• Linear regression
+• Logistic regression
+
+Data:
+
+The fictitious data set for this portfolio includes the records of 2,550 first-year students of an Australian university in terms of case ID, Attrition, Degree Type, Achieved Credit Points, Attendance Type, Age, Failed Credit Points, International student, First in family in university, Gender, GPA, OP Score, Socio Economic Status, Teaching Period Admitted,and Faculty.
+
+Working Environment Configuration:
+
+```{r cars}
+
+# Import Library
+library(ggplot2)
+library(dplyr)
+
+# Data Preprocessing Library
+library(caTools)
+
+# Logistic Regression Library
+library(DAAG)
+library(cowplot)
+library(InformationValue)
+
+# Setting up the working directory
+# So that It can import external file
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+# Import external files
+# Most of the visualization function is stored in this file
+# Please check it if you are interested in the code
+source("data_visualization.R")
+
+# Import Data 
+uniData <- read.csv("datasets/Portfolio_2_data.csv", header = TRUE) %>%
+  select(2:15)
+
+```
+
+## Task 1 Summarise the information in each variable (except case ID) using a table or an appropriate statistical graph
+
+#### Summary each variables using a table
+
+```{r echo=FALSE}
+uniData %>%
+  summary()
+```
+#### Summary each categorical data in uni dataframe using appropriate graphs
+
+```{r}
+visualize_categorical_data(uniData)
+```
+
+#### Summary each numerical data in uni dataframe using appropriate graphs
+
+```{r}
+# A function print out each appropriate graphs
+visualize_numerical_data(uniData)
+```
+
+
+## Task 2 Compare average GPA between male and female students using a graph, conduct a statistical test, and interpret its results
+
+
+```{r}
+visualize_categorical_data(uniData)
+```
