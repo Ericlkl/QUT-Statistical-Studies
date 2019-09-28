@@ -95,8 +95,23 @@ visualize_categorical_data(uniData)
 visualize_numerical_data(uniData)
 ```
 
+The function operated above generates one density graphs and four histogram illustrating the distribution of each numerical variables in the data frame. The summaries of each chart are listed below.
+  
+### 1. The distribution of the age of the students
 
+   Not surprisingly, most of the students are around 17 and 19 years old. They normally enrolled in the university after graduated from high school. However, also some students are over 20 years old. It could be some students enrolled in the university after finishing a lower education, such as a diploma or certificate IV.
+  
+### 2. The distribution of achieved credit points among students
+  The histogram does not show any interesting fact to be noted. Most of the students in the record are in second year of their study.
 
+### 3. The GPA distribution among students
+  Most of the student average around a GPA of 4 to 6. It can be summarised that there are approximately 80% of student with a GPA higher than 3.5, while the remainders are with a lower GPA less than 3.5.
+      
+### 4. The OP Score distribution among students
+  Clearly, most of the students get OP score around 5 to 10. The diagram occurs right-skewed.
+  
+### 5.The distribution of failed credit points among students
+  Not surprisingly, most of the students are highly possible that never fail any unit (0 point) or one single unit (12 point). It makes the diagrams tend to be frequent on the left-hand side.
 
 ## Task 2 Compare average GPA between male and female students using a graph, conduct a statistical test, and interpret its results
 

@@ -37,7 +37,7 @@ visualize_numerical_data <- function(uniData){
   
   print ( 
     ggplot(uniData, aes(x = Achieved_Credit_Points )) + 
-      geom_density() + 
+      geom_histogram(bins = 10, color="darkblue", fill="lightblue") + 
       xlim(0, 220) + 
       labs(x = "Achieved_Credit_Points" , y = "Frequency", title = "Density Graph of Achieved_Credit_Points" ) 
   )
@@ -58,7 +58,7 @@ visualize_numerical_data <- function(uniData){
   # Without Log
   print (
     ggplot(uniData, aes(x = Failed_Credit_Points )) + 
-      geom_histogram(bins = 5, color="darkblue", fill="lightblue") + 
+      geom_histogram(bins = 10, color="darkblue", fill="lightblue") + 
       labs( x = "Failed_Credit_Point" , y = "Number of Students", title = "Histogram of Failed_Credit_Point" ) 
   )
   
@@ -101,9 +101,43 @@ visualize_relationship_op_and_gpa <- function(uniData){
 
 visualize_scatterplots_Vs_GPA <-function(uniData){
   
-  scatter.smooth(x=uniData$Age, y=uniData$GPA, main="Age vs GPA", col="red")
-  scatter.smooth(x= uniData$OP_Score, y= uniData$GPA, main="OP_Score vs GPA" , col="red")
-  scatter.smooth(x= uniData$Achieved_Credit_Points, y= uniData$GPA, main="Achieved_Credit_Points vs OP_Score" , col="red")
-  scatter.smooth(x= uniData$Failed_Credit_Points, y= uniData$GPA, main="Failed_Credit_Points vs OP_Score" , col="red")
+  scatter.smooth(
+    x=uniData$Age, y=uniData$GPA, main="Age vs GPA", col="blue",
+    xlab="Age", ylab="GPA"
+  )
+  
+  abline(lm(uniData$GPA ~ uniData$Age), col="red", lty=2, lwd=2)
+  
+  legend("bottomright", 
+         legend = c("Linear Regression Line", "Loess Line"), 
+         col = c("red", "black"), lty=2:1, cex=0.8
+  )
+  
+  scatter.smooth(
+    x= uniData$OP_Score, y= uniData$GPA, main="OP_Score vs GPA" , col="blue",
+    xlab="Score", ylab="GPA"
+  )
+  
+  abline(lm(uniData$GPA ~ uniData$OP_Score), col="red", lty=2, lwd=2)
+  
+  scatter.smooth(
+    x= uniData$Achieved_Credit_Points, y= uniData$GPA, main="Achieved_Credit_Points vs OP_Score", 
+    col="blue", xlab="Achieved Credit Points", ylab="GPA"
+  )
+  
+  abline(lm(uniData$GPA ~ uniData$Achieved_Credit_Points), col="red", lty=2, lwd=2)
+  
+  scatter.smooth(
+    x= uniData$Failed_Credit_Points, y= uniData$GPA, main="Failed_Credit_Points vs OP_Score", 
+    col="blue", xlab="Failed Credit Points", ylab="GPA"
+  )
+  
+  abline(lm(uniData$GPA ~ uniData$Failed_Credit_Points), col="red", lty=2, lwd=2)
+  
+  legend("topright", 
+         legend = c("Linear Regression Line", "Loess Line"), 
+         col = c("red", "black"), lty=2:1, cex=0.8
+  )
+  
 }
 
