@@ -73,12 +73,6 @@ visualize_boxplot_gpa_vs_gender <- function(uniData){
       geom_boxplot() + 
       labs( x= "Gender", title = "BoxPlot ( GPA vs Gender )" )  
   )
-  
-  # T Test
-  t.test(uniData$GPA ~ uniData$Gender)
-  # Variance
-  var.test(uniData$GPA ~ uniData$Gender)
-  
 }
 
 visualize_relationship_op_and_gpa <- function(uniData){

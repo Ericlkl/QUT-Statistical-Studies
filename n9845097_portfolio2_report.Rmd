@@ -75,10 +75,62 @@ visualize_categorical_data(uniData)
 visualize_numerical_data(uniData)
 ```
 
-
 ## Task 2 Compare average GPA between male and female students using a graph, conduct a statistical test, and interpret its results
 
+```{r}
+# Compare average GPA between Male and Female 
+# Conduct a statistical Test
+# Interpret its results
+visualize_boxplot_gpa_vs_gender(uniData)
+```
+
+
+### T-Test & Variance
+```{r}
+# T Test
+t.test(uniData$GPA ~ uniData$Gender)
+# Variance
+var.test(uniData$GPA ~ uniData$Gender)
+```
+
+
+## Task3 Explore the relationship between OP Score and GPA using a graph, describe the relationship
+```{r}
+visualize_relationship_op_and_gpa(uniData)
+```
+
+
+## Task 4 Linear Regression
+
+Develop a linear regression model of GPA using the given data. You need to describe your choice of predictors, examine your model’s assumptions, assess model fit, and interpret the final model’s regression coefficients.
+
+Analyse Each numbemerical data its relation related to GPA
 
 ```{r}
-visualize_categorical_data(uniData)
+visualize_scatterplots_Vs_GPA(uniData)
+
 ```
+
+### Spiting dataframe into training set and test set
+```{r}
+set.seed(2)
+
+split <- sample.split(uniData, SplitRatio = 0.7)
+train <- subset(uniData, split==TRUE)
+test <- subset(uniData, split==FALSE)
+
+```
+
+### Training Linear Regression Model
+```{r}
+linear_model <- lm(GPA ~ Achieved_Credit_Points, data=train)
+summary(linear_model)
+```
+### Plot the Linear Regression Prediction Line
+```{r}
+
+plot(linear_model)
+
+```
+
+## Task 5 Logistic Regression
