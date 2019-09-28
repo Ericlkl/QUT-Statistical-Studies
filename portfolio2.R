@@ -41,15 +41,101 @@ visualize_scatterplots_Vs_GPA(uniData)
 set.seed(2)
 library(caTools)
 
-predict_df <- uniData %>%
-  select(c("Age", "Failed_Credit_Points", "OP_Score", "Achieved_Credit_Points", "GPA"))
+split <- sample.split(uniData, SplitRatio = 0.7)
+train <- subset(uniData, split==TRUE)
+test <- subset(uniData, split==FALSE)
 
-split <- sample.split(predict_df, SplitRatio = 0.7)
-train <- subset(predict_df, split==TRUE)
-test <- subset(predict_df, split==FALSE)
+linear_model <- lm(GPA ~ Achieved_Credit_Points, data=train)
+summary(linear_model)
 
-linear_model_age <- lm(GPA ~ Age, data=train)
-summary(linear_model_age)
+plot(linear_model)
 
-linear_model_Achieved_Credit_Points <- lm(GPA ~ Achieved_Credit_Points, data=train)
-summary(linear_model_Achieved_Credit_Points)
+# Task 5 -------------------------------------------------------------
+# Logistic Regression
+
+# Cross Table
+xtabs(~ uniData$Attrition + uniData$Socio_Economic_Status)
+
+# logistic Regression Model
+log_model <- glm(Attrition ~ Socio_Economic_Status, data=uniData, family = "binomial")
+summary(log_model)
+
+ll.null <- log_model$null.deviance / -2
+ll.proposed <- log_model$deviance / -2
+
+# McFadden's Pseudo R^2 = [ LL(Null) - LL (Proposed) ] / LL(Null)
+(ll.null - ll.proposed) / ll.null
+
+# p-value
+p_value <- 1 - pchisq( 2*(ll.proposed - ll.null), df=1 )
+p_value
+
+predicted.data <- data.frame(
+  probability.of.Attrition = log_model$fitted.values,
+  Socio_Economic_Status = uniData$Socio_Economic_Status
+)
+
+xtabs(~ probability.of.Attrition + Socio_Economic_Status ,data=predicted.data)
+
+# Logistic Regression with all predictors
+log_model <- glm(Attrition ~ ., data=uniData, family = "binomial")
+summary(log_model)
+
+ll.null <- log_model$null.deviance / -2
+ll.proposed <- log_model$deviance / -2
+
+# McFadden's Pseudo R^2 = [ LL(Null) - LL (Proposed) ] / LL(Null)
+(ll.null - ll.proposed) / ll.null
+
+# p-value
+p_value <- 1 - pchisq( 2*(ll.proposed - ll.null), df=1 )
+p_value
+
+library(DAAG)
+vif(log_model)
+
+predicted.data <- data.frame(
+  probability.of.Attrition = log_model$fitted.values,
+  Attrition = uniData$Attrition
+)
+
+# Sort 
+predicted.data <- predicted.data[order(predicted.data$probability.of.Attrition, decreasing = FALSE),]
+predicted.data$rank <- 1:nrow(predicted.data)
+
+library(cowplot)
+
+ggplot(data=predicted.data, aes(x=rank, y=probability.of.Attrition) ) +
+  geom_point(aes(color=Attrition), alpha = 1, shape = 4, stroke = 2) +
+  xlab("Index") +
+  ylab("Predicted probability of Attrition")
+
+library(InformationValue)
+
+predicted.data$actuals <- factor(predicted.data$Attrition, labels = c(0,1))
+
+plotROC(actuals = predicted.data$actuals, predictedScores = predicted.data$probability.of.Attrition)
+
+optCutOff = optimalCutoff(predicted.data$actuals, predicted.data$probability.of.Attrition)[1]
+
+misClassError(
+  predicted.data$actuals,
+  predicted.data$probability.of.Attrition, 
+  threshold = optCutOff 
+)
+
+sensitivity(predicted.data$actuals,
+            predicted.data$probability.of.Attrition, 
+            threshold = optCutOff )
+
+specificity(predicted.data$actuals,
+            predicted.data$probability.of.Attrition, 
+            threshold = optCutOff )
+
+confusionMatrix(predicted.data$actuals,
+                predicted.data$probability.of.Attrition, 
+                threshold = optCutOff )
+
+
+
+

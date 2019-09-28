@@ -106,16 +106,16 @@ visualize_relationship_op_and_gpa <- function(uniData){
 
 visualize_scatterplots_Vs_GPA <-function(uniData){
   
-  scatter.smooth(x=uniData$Age, y=uniData$GPA, main="Age vs GPA")
+  scatter.smooth(x=uniData$Age, y=uniData$GPA, main="Age vs GPA", col="red")
   cor(uniData$Age, uniData$GPA)
   
-  scatter.smooth(x= uniData$OP_Score, y= uniData$GPA, main="OP_Score vs GPA")
+  scatter.smooth(x= uniData$OP_Score, y= uniData$GPA, main="OP_Score vs GPA" , col="red")
   cor(uniData$OP_Score, uniData$GPA)
   
-  scatter.smooth(x= uniData$Achieved_Credit_Points, y= uniData$GPA, main="Achieved_Credit_Points vs OP_Score")
+  scatter.smooth(x= uniData$Achieved_Credit_Points, y= uniData$GPA, main="Achieved_Credit_Points vs OP_Score" , col="red")
   cor(uniData$Achieved_Credit_Points, uniData$GPA)
   
-  scatter.smooth(x= uniData$Failed_Credit_Points, y= uniData$GPA, main="Failed_Credit_Points vs OP_Score")
+  scatter.smooth(x= uniData$Failed_Credit_Points, y= uniData$GPA, main="Failed_Credit_Points vs OP_Score" , col="red")
   cor(uniData$Failed_Credit_Points, uniData$GPA)
   
 }
