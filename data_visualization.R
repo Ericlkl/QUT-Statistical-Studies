@@ -69,9 +69,10 @@ visualize_boxplot_gpa_vs_gender <- function(uniData){
   # Visualize boxplot graph (GPA Vs Gender)
   print(
     uniData %>%
-      ggplot(aes(x= Gender, y = GPA)) + 
+      ggplot(aes(x= Gender, y = GPA, color=Gender)) + 
       geom_boxplot() + 
-      labs( x= "Gender", title = "BoxPlot ( GPA vs Gender )" )  
+      labs( x= "Gender", title = "BoxPlot ( GPA vs Gender )" ) +
+      ylim(0, 7)
   )
 }
 
@@ -101,16 +102,8 @@ visualize_relationship_op_and_gpa <- function(uniData){
 visualize_scatterplots_Vs_GPA <-function(uniData){
   
   scatter.smooth(x=uniData$Age, y=uniData$GPA, main="Age vs GPA", col="red")
-  cor(uniData$Age, uniData$GPA)
-  
   scatter.smooth(x= uniData$OP_Score, y= uniData$GPA, main="OP_Score vs GPA" , col="red")
-  cor(uniData$OP_Score, uniData$GPA)
-  
   scatter.smooth(x= uniData$Achieved_Credit_Points, y= uniData$GPA, main="Achieved_Credit_Points vs OP_Score" , col="red")
-  cor(uniData$Achieved_Credit_Points, uniData$GPA)
-  
   scatter.smooth(x= uniData$Failed_Credit_Points, y= uniData$GPA, main="Failed_Credit_Points vs OP_Score" , col="red")
-  cor(uniData$Failed_Credit_Points, uniData$GPA)
-  
 }
 

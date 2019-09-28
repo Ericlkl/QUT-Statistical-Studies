@@ -21,27 +21,21 @@ This portfolio accounts for 20% of your overall grade of CAB220. Full mark of th
 
 Data:
 
-The fictitious data set for this portfolio includes the records of 2,550 first-year students of an Australian university in terms of case ID, Attrition, Degree Type, Achieved Credit Points, Attendance Type, Age, Failed Credit Points, International student, First in family in university, Gender, GPA, OP Score, Socio Economic Status, Teaching Period Admitted,and Faculty.
+  The fictitious data set for this portfolio includes the records of 2,550 first-year students of an Australian university in terms of case ID, Attrition, Degree Type, Achieved Credit Points, Attendance Type, Age, Failed Credit Points, International student, First in family in university, Gender, GPA, OP Score, Socio Economic Status, Teaching Period Admitted,and Faculty.
 
 Working Environment Configuration:
 
-```{r cars}
+```{r eval=TRUE}
 
 # Import Library
 library(ggplot2)
 library(dplyr)
 
-# Data Preprocessing Library
-library(caTools)
-
-# Logistic Regression Library
-library(DAAG)
-library(cowplot)
-library(InformationValue)
-
 # Setting up the working directory
 # So that It can import external file
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+# Warning!!! -- Disable the next line, if you need to export the pdf report
+#               Otherwise, you will need the next line to generates diagram later on
+# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Import external files
 # Most of the visualization function is stored in this file
@@ -58,35 +52,79 @@ uniData <- read.csv("datasets/Portfolio_2_data.csv", header = TRUE) %>%
 
 #### Summary each variables using a table
 
-```{r echo=FALSE}
-uniData %>%
-  summary()
+```{r eval=TRUE}
+summary(uniData)
 ```
 #### Summary each categorical data in uni dataframe using appropriate graphs
 
-```{r}
+```{r eval=TRUE}
 visualize_categorical_data(uniData)
 ```
+  
+  The function operated above generates 9 bar charts illustrating the distribution of each categorical variables in the data frame. The summaries of each chart are listed below.
+  
+### 1. The distribution of the attrition of the students
+  It is evident that students in retained attrition are approximately four times more than students in not retained attrition. 
+      
+### 2. The distribution of degree type among students
+  Almost 93% of students are doing a single degree, while the rest are doing a double degree.
 
-#### Summary each numerical data in uni dataframe using appropriate graphs
+### 3. The attendance type distribution among students
+  Not surprisingly, most of the students are studying full-time at university. On the other hand, around ten per cent of students is a part-time student.
+      
+### 4. The distribution of first in family in all the students
+  There are approximately 95% of students are local students in the university, while the remainder is international students.
+  
+### 5. The distribution of gender among students
+  It is interesting that gender in the university is evenly distributed. It doesn't have a huge statistical outliner.
 
-```{r}
+### 6. The economic status of each students. 
+  Half proportion of the students are in medium-income families. Approximately 30 per cent of students are in high-income families, while around 18% of students were heavily concerning their economic status.
+
+### 7. The distribution of the period students admitted to university
+  The chart shows that approximately 80 per cent of the students joined the university in semester 1, while only 20 per cent of students admitted by the university in semester 2.
+  
+### 8. The distribution of students in each faculty
+  Both Faculty of Health, Science and Engineering contain the most amount of student, while CI Faculty and Business School contain the second most amount of student. Faculty of Education, however, has the least amount of student enrolled in the recorded period.
+
+
+#### Summary each numerical data using appropriate graphs
+
+```{r eval=TRUE}
 # A function print out each appropriate graphs
 visualize_numerical_data(uniData)
 ```
 
+
+
+
 ## Task 2 Compare average GPA between male and female students using a graph, conduct a statistical test, and interpret its results
 
-```{r}
+### Summary GPA for male
+```{r eval=TRUE}
+male_data <- uniData %>%
+  filter(Gender == "M") 
+
+summary(male_data$GPA)
+```
+
+### Summary GPA for Female
+```{r eval=TRUE}
+female_data <- uniData %>%
+  filter(Gender == "F") 
+
+summary(female_data$GPA)
+```
+
+```{r eval=TRUE}
 # Compare average GPA between Male and Female 
 # Conduct a statistical Test
 # Interpret its results
 visualize_boxplot_gpa_vs_gender(uniData)
 ```
 
-
 ### T-Test & Variance
-```{r}
+```{r eval=TRUE}
 # T Test
 t.test(uniData$GPA ~ uniData$Gender)
 # Variance
@@ -95,26 +133,43 @@ var.test(uniData$GPA ~ uniData$Gender)
 
 
 ## Task3 Explore the relationship between OP Score and GPA using a graph, describe the relationship
-```{r}
+```{r eval=TRUE}
 visualize_relationship_op_and_gpa(uniData)
 ```
 
+### Bar chart (OP Score VS GPA)
+  The first bar chart displayed the relationship between OP score and GPA. Each bar indicates every student achieves in the OP exam, while each bar is filled with 8 different colours which indicate how these students perform in the university. The GPA score is rounded to the nearest integer, for instance, 3.67 will be rounded to 4 and 6.18 will be rounded to 6.
+  
+  Most of the students, who get the lowerest OP exam, tend to perform better in the university. Approximately 50% of students, who get 1 OP score, archived above GPA 6 when they are studying in university. In contrast, about 40% of students, who get 25 OP score, archived below GPA 4 which means failed the study in university.
+  
+  In conclusion, if students get the lower OP scores tends to performs better in the university.
 
 ## Task 4 Linear Regression
 
 Develop a linear regression model of GPA using the given data. You need to describe your choice of predictors, examine your model’s assumptions, assess model fit, and interpret the final model’s regression coefficients.
 
-Analyse Each numbemerical data its relation related to GPA
+Analyse Each numerical data its relation related to GPA
 
-```{r}
+## Correlation between each numerical data and GPA
+  1. Age : `r cor(uniData$Age, uniData$GPA)`
+  2. OP_Score : `r cor(uniData$OP_Score, uniData$GPA)`
+  3. Achieved_Credit_Points : `r cor(uniData$Achieved_Credit_Points, uniData$GPA)`
+  4. Failed_Credit_Points : `r cor(uniData$Failed_Credit_Points, uniData$GPA)`
+
+```{r eval=TRUE}
 visualize_scatterplots_Vs_GPA(uniData)
-
 ```
 
-### Spiting dataframe into training set and test set
-```{r}
-set.seed(2)
+### The chosen predictors
+  It is evident that GPA will always be selected to be Y-axis which is classified as quantitative value. The predictor will need to be a strong data value that could have a significant impact on the analysis. From the correlation score and scatterplot we get above, Achieved Credit Point seems to be a biased and homoscedastic graph. It provides a good fit for the linear regression model as it has a positive linear relationship and a positive correlation value. It also achieves the highest correlation score which indicates that it has the strongest relationship with GPA comparing to the other three. Therefore, Achieved Credit Point is selected to train and test the simple linear regression model.
 
+### Spiting dataframe into training set and test set
+```{r eval=TRUE}
+# Data Preprocessing Library
+library(caTools)
+# Set Random seed
+set.seed(2)
+# Splitting Training and test dataset
 split <- sample.split(uniData, SplitRatio = 0.7)
 train <- subset(uniData, split==TRUE)
 test <- subset(uniData, split==FALSE)
@@ -122,15 +177,22 @@ test <- subset(uniData, split==FALSE)
 ```
 
 ### Training Linear Regression Model
-```{r}
+```{r eval=TRUE}
 linear_model <- lm(GPA ~ Achieved_Credit_Points, data=train)
 summary(linear_model)
 ```
 ### Plot the Linear Regression Prediction Line
-```{r}
+```{r eval=TRUE}
 
 plot(linear_model)
 
 ```
 
 ## Task 5 Logistic Regression
+
+```{r eval=TRUE}
+# Logistic Regression Library
+library(DAAG)
+library(cowplot)
+library(InformationValue)
+```
