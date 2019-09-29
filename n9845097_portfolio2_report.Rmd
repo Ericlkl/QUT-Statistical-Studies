@@ -26,22 +26,17 @@ Data:
 Working Environment Configuration:
 
 ```{r eval=TRUE,message=FALSE}
-
 # Import Library
 library(ggplot2)
 library(dplyr)
-
-# Setting up the working directory
-# So that It can import external file
-# Warning!!! -- Disable the next line, if you need to export the pdf report
-#               Otherwise, you will need the next line to generates diagram later on
-
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
+# Logistic Regression Library
+library(DAAG)
 # Import external files
 # Most of the visualization function is stored in this file
 # Please check it if you are interested in the code
 source("data_visualization.R")
+# Helper function for Logistic Regression
+source("regression_helper.R")
 
 # Import Data 
 uniData <- read.csv("datasets/Portfolio_2_data.csv", header = TRUE) %>%
@@ -216,12 +211,6 @@ plot(linear_model)
 ```
 
 ## Task 5 Logistic Regression
-
-```{r eval=TRUE, message=FALSE}
-# Logistic Regression Library
-library(DAAG)
-source("regression_helper.R")
-```
 
 ### Bivariate exploration
 ```{r eval=TRUE}
