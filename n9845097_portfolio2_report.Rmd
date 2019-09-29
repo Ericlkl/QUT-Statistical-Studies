@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## CAB220 Portfolio2
 
 Overview
-This portfolio accounts for 20% of your overall grade of CAB220. Full mark of this portfolio is 20. The tasks in this portfolio are designed to assess your knowledge and skills in
+This portfolio accounts for 20% of overall grade of CAB220. Full mark of this portfolio is 20. The tasks in this portfolio are designed to assess your knowledge and skills in
 
 • Descriptive statistical data analysis and visualisation 
 • Statistical hypothesis testing
@@ -35,7 +35,8 @@ library(dplyr)
 # So that It can import external file
 # Warning!!! -- Disable the next line, if you need to export the pdf report
 #               Otherwise, you will need the next line to generates diagram later on
-# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Import external files
 # Most of the visualization function is stored in this file
@@ -176,7 +177,8 @@ visualize_scatterplots_Vs_GPA(uniData)
 ```
 
 ### The chosen predictors
-  It is evident that GPA will always be selected to be Y-axis which is classified as quantitative value. The predictor will need to be a strong data value that could have a significant impact on the analysis. From the correlation score and scatterplot we get above, Achieved Credit Point seems to be a biased and homoscedastic graph. It provides a good fit for the linear regression model as it has a positive linear relationship and a positive correlation value. It also achieves the highest correlation score which indicates that it has the strongest relationship with GPA comparing to the other three. Therefore, Achieved Credit Point is selected to train and test the simple linear regression model.
+  It is evident that GPA will always be selected to be Y-axis which is classified as quantitative value. The predictor will need to be a strong data value that could have a significant impact on the analysis. From the correlation coefficient and scatterplot we got above, Achieved Credit Point seems to be a biased and homoscedastic graph. It provides a good fit for the linear regression model as it has a positive linear relationship and a positive moderate correlation coefficient. It also achieves the highest correlation coefficient which indicates that it presents the strongest relationship with GPA comparing to the other three. Therefore, Achieved Credit Point is selected to train and test the simple linear regression model.
+  From the Scatterplot (Achieved Credit Points vs GPA), we can know that people higher Achieved Credit Points (Successfully complete the unit they study)  are likely to have higher GPA.
 
 ### Spiting dataframe into training set and test set
 ```{r eval=TRUE}
@@ -196,6 +198,18 @@ test <- subset(uniData, split==FALSE)
 linear_model <- lm(GPA ~ Achieved_Credit_Points, data=train)
 summary(linear_model)
 ```
+#### regression function: GPA = 3.1854527 + 0.0149224 * Achieved_Credit_Points that can be used for prediction
+#### The typical difference between the Achieved Credit Points and the GPA predicted by the model is about 1.411 percentage points.
+#### 24.6% of the variability in GPA can be explained by Achieved Credit Points.
+
+### AIC / BIC 
+```{r eval=TRUE}
+# two information criteria, only useful when comparing competing models
+# Smaller value = better model
+AIC(linear_model)
+BIC(linear_model)
+```
+
 ### Plot the Linear Regression Prediction Line
 ```{r eval=TRUE}
 plot(linear_model)
@@ -211,7 +225,16 @@ source("regression_helper.R")
 
 ### Bivariate exploration
 ```{r eval=TRUE}
-xtabs(~ uniData$Attrition + uniData$Socio_Economic_Status)
+attach(uniData)
+print (xtabs(~ Attrition + Faculty))
+print (xtabs(~ Attrition + Socio_Economic_Status))
+print (xtabs(~ Attrition + Degree_Type))
+print (xtabs(~ Attrition + Attendance_Type))
+print (xtabs(~ Attrition + First_in_family))
+print (xtabs(~ Attrition + Teaching._Period_Admitted))
+print (xtabs(~ Attrition + Gender))
+print (xtabs(~ Attrition + International_student))
+detach(uniData)
 ```
 
 ### A simple model with only one predictor
