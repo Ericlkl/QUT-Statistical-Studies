@@ -3,19 +3,19 @@ CAB220-Portfolio2 (Data Science Project - R)
 
 ## Skills
 ```
-  Data Manipulation
-  Data Visualization
-  Importing Data
-  Linear Regression
-  Logistic Regression
+Data Manipulation
+Data Visualization
+Importing Data
+Linear Regression
+Logistic Regression
 ```
 ### Prerequisites
 
 Things you need to install the software and how to install them
 
 ```
-  R
-  R Studio
+R
+R Studio
 ```
 
 ## How To Use it 
