@@ -6,8 +6,8 @@ QUT-Statistical-Studies
 Data Manipulation
 Data Visualization
 Importing Data
-Linear Regression
-Logistic Regression
+Decision Tree Algorithm
+Anova One side Test
 ```
 ### Prerequisites
 
@@ -16,6 +16,8 @@ Things you need to install the software and how to install them
 ```
 R
 R Studio
+Jupyter notebook
+Python
 ```
 
 ## How To Use it 
